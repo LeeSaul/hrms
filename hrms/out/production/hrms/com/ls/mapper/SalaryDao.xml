@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ls.dao.SalaryDao">
+    <resultMap id="salaryMap" type="Salary">
+        <id property="id" column="id"/>
+        <result property="empId" column="emp_id"/>
+        <result property="socialSecurity" column="social_security"/>
+        <result property="overTimePay" column="overtime_pay"/>
+        <result property="performancePay" column="performance_pay"/>
+        <result property="rePunPay" column="re_pun_pay"/>
+        <result property="realWage" column="real_wage"/>
+        <result property="createDate" column="create_date"/>
+        <result property="basicWage" column="basic_wage"/>
+    </resultMap>
+    <insert id="saveSalary" parameterType="Salary">
+        insert into SALARY
+        <trim suffixOverrides="," prefix="(" suffix=")">
+            id,
+            <if test="empId!=null">
+                emp_id,
+            </if>
+            <if test="socialSecurity!=0">
+                social_security,
+            </if>
+            <if test="overTimePay!=0">
+                overtime_pay,
+            </if>
+            <if test="performancePay!=0">
+                performance_pay,
+            </if>
+            <if test="rePunPay!=0">
+                re_pun_pay,
+            </if>
+            <if test="realWage!=0">
+                real_wage,
+            </if>
+            <if test="createDate!=null">
+                create_date,
+            </if>
+            <if test="basicWage!=0">
+                basic_wage,
+            </if>
+        </trim>
+        <trim suffixOverrides="," prefix="values(" suffix=")">
+            aa.nextval,
+            <if test="empId!=null">
+                #{empId},
+            </if>
+            <if test="socialSecurity!=0">
+                #{socialSecurity},
+            </if>
+            <if test="overTimePay!=0">
+                #{overTimePay},
+            </if>
+            <if test="performancePay!=0">
+                #{performancePay},
+            </if>
+            <if test="rePunPay!=0">
+                #{rePunPay},
+            </if>
+            <if test="realWage!=0">
+                #{realWage},
+            </if>
+            <if test="createDate!=null">
+                #{createDate},
+            </if>
+            <if test="basicWage!=0">
+                #{basicWage},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSocialRePun" parameterType="Salary">
+        update SALARY SET
+        <trim suffixOverrides=",">
+            <if test="overTimePay!=0">
+                overtime_pay=overtime_pay+#{overTimePay},
+            </if>
+            <if test="rePunPay!=0">
+                re_pun_pay=re_pun_pay+#{rePunPay},
+            </if>
+            <if test="realWage!=0">
+                real_wage=#{realWage},
+            </if>
+            <if test="performancePay!=0">
+                performance_Pay=performance_Pay+#{performancePay},
+            </if>
+            <if test="socialSecurity!=0">
+                SOCIAL_SECURITY=performance_Pay+#{socialSecurity},
+            </if>
+            <if test="basicWage!=0">
+                basic_Wage=#{basicWage},
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+    <select id="queryAMonthSalary" resultMap="salaryMap">
+        select * from SALARY where EMP_ID=#{0} and
+        <![CDATA[ to_date(create_date,'yyyy-mm-dd hh24:mi:ss')<to_date(#{2},'yyyy-mm-dd hh24:mi:ss')]]>
+        and to_date(create_date,'yyyy-mm-dd hh24:mi:ss')>=to_date(#{1},'yyyy-mm-dd hh24:mi:ss')
+    </select>
+
+    <select id="querySalary" resultMap="salaryMap">
+        select * from SALARY where <![CDATA[to_date(CREATE_DATE,'yyyy-mm-dd hh24:mi:ss')<to_date(#{1},'yyyy-mm-dd hh24:mi:ss')]]>
+        and to_date(CREATE_DATE,'yyyy-mm-dd hh24:mi:ss')>=to_date(#{0},'yyyy-mm-dd hh24:mi:ss')
+    </select>
+    <select id="queryCurrentSalary" resultMap="salaryMap">
+        select * from SALARY where EMP_ID=#{0} and to_date(create_date,'yyyy-mm-dd hh24:mi:ss')=to_date(#{1},'yyyy-mm-dd hh24:mi:ss')
+    </select>
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ls.dao.RecruitmentDao">
+    <resultMap id="recruitmentMap" type="Recruitment">
+        <id property="id" column="id"/>
+        <result property="createDate" column="create_date"/>
+        <result property="description" column="description"/>
+        <result property="otherInfo" column="other_info"/>
+        <result property="positionType" column="position_type"/>
+        <result property="salary" column="salary"/>
+        <result property="workingPlace" column="working_place"/>
+    </resultMap>
+
+
+    <insert id="addRecruitment" parameterType="Recruitment">
+        insert into RECRUITMENT
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="createDate!=null">
+                create_date,
+            </if>
+            <if test="description!=null">
+                description,
+            </if>
+            <if test="otherInfo!=null">
+                other_info,
+            </if>
+            <if test="positionType!=null">
+                position_type,
+            </if>
+            <if test="salary!=null">
+                salary,
+            </if>
+            <if test="workingPlace!=null">
+                working_place,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            aa.nextval,
+            <if test="createDate!=null">
+                #{createDate},
+            </if>
+            <if test="description!=null">
+                #{description},
+            </if>
+            <if test="otherInfo!=null">
+                #{otherInfo},
+            </if>
+            <if test="positionType!=null">
+                #{positionType},
+            </if>
+            <if test="salary!=null">
+                #{salary},
+            </if>
+            <if test="workingPlace!=null">
+                #{workingPlace},
+            </if>
+        </trim>
+</insert>
+    <update id="updateRecruitment" parameterType="Recruitment">
+        update RECRUITMENT set WORKING_PLACE=#{workingPlace},
+        salary=#{salary},position_type=#{positionType},
+        description=#{description},create_Date=#{createDate},
+        other_Info=#{otherInfo} where id=#{id}
+    </update>
+    <delete id="deleteRecruitmentById" parameterType="int">
+        delete from RECRUITMENT where ID=#{id}
+    </delete>
+    <select id="queryRecruitment" resultMap="recruitmentMap">
+        select * from RECRUITMENT
+    </select>
+    <select id="queryRecruitmentById" parameterType="int" resultMap="recruitmentMap">
+        select * from RECRUITMENT WHERE ID=#{id}
+    </select>
+</mapper>

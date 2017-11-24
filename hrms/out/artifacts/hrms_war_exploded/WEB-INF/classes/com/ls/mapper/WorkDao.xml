@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ls.dao.WorkDao">
+    <resultMap id="workMap" type="Work">
+        <id property="id" column="id"/>
+        <result property="workTime" column="work_time"/>
+        <result property="offWorkTime" column="off_work_time"/>
+        <result property="days" column="days"/>
+        <result property="overTime" column="overtime"/>
+        <result property="overPay" column="over_pay"/>
+    </resultMap>
+    <insert id="saveWordTime" parameterType="Work">
+        insert into work(ID, WORK_TIME, OFF_WORK_TIME,days,OVERTIME,OVER_PAY)
+        VALUES(aa.nextval,#{workTime},#{offWorkTime},#{days},#{overTime},#{overPay})
+    </insert>
+    <update id="updateWork" parameterType="Work">
+        update work set
+         WORK_TIME=#{workTime},off_work_time=#{offWorkTime},
+         days=#{days},OVERTIME=#{overTime},OVER_PAY=#{overPay}
+    </update>
+    <select id="queryWork" resultMap="workMap">
+        select * from work
+    </select>
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ls.dao.DepartmentDao">
+    <resultMap id="depMap" type="com.ls.model.Department">
+        <id column="de_id" property="id"/>
+        <result column="dep_name" property="depName"/>
+        <result column="dep_type" property="depType"/>
+        <result column="dep_description" property="depDescription"/>
+        <result column="dep_createdate" property="depCreatedate"/>
+        <!--<association property="id" javaType="DepOption">
+            <id property="id" column="op_id"/>
+            <result property="optionName" column="OPTION_NAME"/>
+            <result property="depId" column="op_dep_id"/>
+            <result property="optionDesc" column="option_desc"/>
+        </association>-->
+    </resultMap>
+    <insert id="addDep" parameterType="Department">
+        <selectKey keyProperty="id" resultType="int">
+            select aa.nextval from dual
+        </selectKey>
+        insert into department
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="depName!=null">
+                dep_name,
+            </if>
+            <if test="depType!=null">
+                dep_type,
+            </if>
+            <if test="depDescription!=null">
+                dep_description,
+            </if>
+            <if test="depCreatedate!=null">
+                dep_createdate,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            aa.nextval,
+            <if test="depName!=null">
+                #{depName},
+            </if>
+            <if test="depType!=null">
+                #{depType},
+            </if>
+            <if test="depDescription!=null">
+                #{depDescription},
+            </if>
+            <if test="depCreatedate!=null">
+                #{depCreatedate},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateDepById" parameterType="Department">
+        update DEPARTMENT set DEP_NAME=#{depName}, DEP_TYPE=#{depType},DEP_DESCRIPTION=#{depDescription},DEP_CREATEDATE=#{depCreatedate} where id=#{id}
+    </update>
+    <delete id="deleteDepById" parameterType="int">
+        DELETE from DEPARTMENT where ID=#{id}
+    </delete>
+    <select id="queryAllDep" resultMap="depMap">
+       select de.ID de_id ,de.DEP_TYPE dep_type,
+       de.DEP_NAME dep_name,de.DEP_DESCRIPTION dep_description,
+       de.DEP_CREATEDATE dep_createdate/*,op.ID op_id,
+       op.DEP_ID op_dep_id,op.OPTION_NAME option_name ,
+       op.OPTION_DESC option_desc */from DEPARTMENT de /*LEFT JOIN DEPOPTION op on de.ID=op.DEP_ID*/
+    </select>
+    <select id="queryDepById" parameterType="int" resultMap="depMap">
+        select de.ID de_id ,de.DEP_TYPE dep_type,
+       de.DEP_NAME dep_name,de.DEP_DESCRIPTION dep_description,
+       de.DEP_CREATEDATE dep_createdate/*,op.ID op_id,
+       op.DEP_ID op_dep_id,op.OPTION_NAME option_name ,
+       op.OPTION_DESC option_desc */ from DEPARTMENT de /*LEFT JOIN DEPOPTION op on de.ID=op.DEP_ID and*/ where ID=#{id}
+    </select>
+    <select id="queryDepByDepName" parameterType="String" resultMap="depMap">
+        select * from DEPARTMENT where DEP_NAME=#{depName}
+    </select>
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ls.dao.TrainDao">
+    <resultMap id="trainMap" type="Train">
+        <id property="id" column="ID"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+    </resultMap>
+    <insert id="addTrain" parameterType="Train">
+        insert into TRAIN
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="title!=null">
+                title,
+            </if>
+            <if test="content!=null">
+                content,
+            </if>
+            <if test="createTime!=null">
+                create_time,
+            </if>
+            <if test="startTime!=null">
+                start_time,
+            </if>
+            <if test="endTime!=null">
+                end_time,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            aa.nextval,
+            <if test="title!=null">
+                #{title},
+            </if>
+            <if test="content!=null">
+                #{content},
+            </if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
+            <if test="startTime!=null">
+                #{startTime},
+            </if>
+            <if test="endTime!=null">
+                #{endTime},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateTrain" parameterType="Train">
+        update train set TITLE=#{title},content=#{content},
+        start_time=#{startTime},end_time=#{endTime},create_time=#{createTime}
+        where id=#{id}
+    </update>
+    <delete id="deleteTrain" parameterType="int">
+        delete from train where id=#{id}
+    </delete>
+    <select id="queryAllTrain" resultMap="trainMap">
+        select * from TRAIN
+    </select>
+    <select id="queryTrainById" parameterType="int" resultMap="trainMap">
+        select * from train WHERE id=#{id}
+    </select>
+
+</mapper>

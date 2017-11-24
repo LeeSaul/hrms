@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ls.dao.ResumeDao">
+    <resultMap id="resumeMap" type="Resume">
+        <id property="id" column="id"/>
+        <result property="touristId" column="tourist_id"/>
+        <result property="resumeName" column="resume_name"/>
+        <result property="age" column="age"/>
+        <result property="gender" column="gender"/>
+        <result property="phone" column="phone"/>
+        <result property="birthdate" column="birthdate"/>
+        <result property="birthplace" column="birthplace"/>
+        <result property="job" column="job"/>
+        <result property="education" column="education"/>
+        <result property="image" column="image"/>
+        <result property="specialSkill" column="special_skill"/>
+        <result property="hobbies" column="hobbies"/>
+        <result property="awards" column="awards"/>
+        <result property="marry" column="marry"/>
+        <result property="email" column="email"/>
+        <result property="selfEvaluation" column="self_evaluation"/>
+        <result property="workExperience" column="work_experience"/>
+        <result property="projectExperience" column="project_experience"/>
+        <result property="educationExperience" column="education_experience"/>
+    </resultMap>
+    <insert id="addResume" parameterType="Resume">
+        <selectKey  keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+            select aa.nextval from dual
+        </selectKey>
+        insert into resume
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="touristId!=null">
+                tourist_id,
+            </if>
+            <if test="resumeName!=null">
+                resume_name,
+            </if>
+            <if test="age!=null">
+                age,
+            </if>
+            <if test="gender!=null">
+                gender,
+            </if>
+            <if test="phone!=null">
+                phone,
+            </if>
+            <if test="birthdate!=null">
+                birthdate,
+            </if>
+            <if test="birthplace!=null">
+                birthplace,
+            </if>
+            <if test="job!=null">
+                job,
+            </if>
+            <if test="education!=null">
+                education,
+            </if>
+            <if test="image!=null">
+                image,
+            </if>
+            <if test="specialSkill!=null">
+                special_skill,
+            </if>
+            <if test="hobbies!=null">
+                hobbies,
+            </if>
+            <if test="awards!=null">
+                awards,
+            </if>
+            <if test="marry!=null">
+                marry,
+            </if>
+            <if test="email!=null">
+                email,
+            </if>
+            <if test="selfEvaluation!=null">
+                self_evaluation,
+            </if>
+            <if test="workExperience!=null">
+                work_experience,
+            </if>
+            <if test="projectExperience!=null">
+                project_experience,
+            </if>
+            <if test="educationExperience!=null">
+                education_experience,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            aa.nextval,
+            <if test="touristId!=null">
+                #{touristId},
+            </if>
+            <if test="resumeName!=null">
+                #{resumeName},
+            </if>
+            <if test="age!=null">
+                #{age},
+            </if>
+            <if test="gender!=null">
+                #{gender},
+            </if>
+            <if test="phone!=null">
+                #{phone},
+            </if>
+            <if test="birthdate!=null">
+                #{birthdate},
+            </if>
+            <if test="birthplace!=null">
+                #{birthplace},
+            </if>
+            <if test="job!=null">
+                #{job},
+            </if>
+            <if test="education!=null">
+                #{education},
+            </if>
+            <if test="image!=null">
+                #{image},
+            </if>
+            <if test="specialSkill!=null">
+                #{specialSkill},
+            </if>
+            <if test="hobbies!=null">
+                #{hobbies},
+            </if>
+            <if test="awards!=null">
+                #{awards},
+            </if>
+            <if test="marry!=null">
+                #{marry},
+            </if>
+            <if test="email!=null">
+                #{email},
+            </if>
+            <if test="selfEvaluation!=null">
+                #{selfEvaluation},
+            </if>
+            <if test="workExperience!=null">
+                #{workExperience},
+            </if>
+            <if test="projectExperience!=null">
+                #{projectExperience},
+            </if>
+            <if test="educationExperience!=null">
+                #{educationExperience},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateResume" parameterType="Resume">
+        update RESUME set
+        <trim suffixOverrides=",">
+            <if test="resumeName!=null">
+                resume_name=#{resumeName},
+            </if>
+            <if test="age!=null">
+                age=#{age},
+            </if>
+            <if test="gender!=null">
+                gender=#{gender},
+            </if>
+            <if test="phone!=null">
+                phone=#{phone},
+            </if>
+            <if test="birthdate!=null">
+                birthdate=#{birthdate},
+            </if>
+            <if test="birthplace!=null">
+                birthplace=#{birthplace},
+            </if>
+            <if test="job!=null">
+                job=#{job},
+            </if>
+            <if test="education!=null">
+                education=#{education},
+            </if>
+            <if test="image!=null">
+                image=#{image},
+            </if>
+            <if test="specialSkill!=null">
+                special_skill=#{specialSkill},
+            </if>
+            <if test="hobbies!=null">
+                hobbies=#{hobbies},
+            </if>
+            <if test="awards!=null">
+                awards=#{awards},
+            </if>
+            <if test="marry!=null">
+                marry=#{marry},
+            </if>
+            <if test="email!=null">
+                email=#{email},
+            </if>
+            <if test="selfEvaluation!=null">
+                self_evaluation=#{selfEvaluation},
+            </if>
+            <if test="workExperience!=null">
+                work_experience=#{workExperience},
+            </if>
+            <if test="projectExperience!=null">
+                project_experience=#{projectExperience},
+            </if>
+            <if test="educationExperience!=null">
+                education_experience=#{educationExperience},
+            </if>
+        </trim>
+        where tourist_Id=#{touristId}
+    </update>
+    <update id="updateEmpResume"  parameterType="Resume">
+        update RESUME set
+        <trim suffixOverrides=",">
+            <if test="resumeName!=null">
+                resume_name=#{resumeName},
+            </if>
+            <if test="age!=null">
+                age=#{age},
+            </if>
+            <if test="gender!=null">
+                gender=#{gender},
+            </if>
+            <if test="phone!=null">
+                phone=#{phone},
+            </if>
+            <if test="birthdate!=null">
+                birthdate=#{birthdate},
+            </if>
+            <if test="birthplace!=null">
+                birthplace=#{birthplace},
+            </if>
+            <if test="job!=null">
+                job=#{job},
+            </if>
+            <if test="education!=null">
+                education=#{education},
+            </if>
+            <if test="image!=null">
+                image=#{image},
+            </if>
+            <if test="specialSkill!=null">
+                special_skill=#{specialSkill},
+            </if>
+            <if test="hobbies!=null">
+                hobbies=#{hobbies},
+            </if>
+            <if test="awards!=null">
+                awards=#{awards},
+            </if>
+            <if test="marry!=null">
+                marry=#{marry},
+            </if>
+            <if test="email!=null">
+                email=#{email},
+            </if>
+            <if test="selfEvaluation!=null">
+                self_evaluation=#{selfEvaluation},
+            </if>
+            <if test="workExperience!=null">
+                work_experience=#{workExperience},
+            </if>
+            <if test="projectExperience!=null">
+                project_experience=#{projectExperience},
+            </if>
+            <if test="educationExperience!=null">
+                education_experience=#{educationExperience},
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+
+    <select id="queryResume" parameterType="int" resultMap="resumeMap">
+        select * from RESUME where TOURIST_ID=#{id}
+    </select>
+    <select id="queryDetailResume" parameterType="int" resultMap="resumeMap">
+        select * from RESUME where ID=#{id}
+    </select>
+</mapper>

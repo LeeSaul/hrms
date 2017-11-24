@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ls.dao.DepOptionDao">
+    <resultMap id="optionMap" type="DepOption">
+        <id property="id" column="id"/>
+        <result property="depId" column="dep_id"/>
+        <result property="optionName" column="option_name"/>
+        <result property="optionDesc" column="option_desc"/>
+    </resultMap>
+    <insert id="addOption" parameterType="DepOption">
+        insert into DEPOPTION
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="depId!=null">
+               dep_id,
+            </if>
+            <if test="optionName!=null">
+                option_name,
+            </if>
+            <if test="optionDesc!=null">
+                option_desc,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            aa.nextval,
+            <if test="depId!=null">
+                #{depId},
+            </if>
+            <if test="optionName!=null">
+                #{optionName},
+            </if>
+            <if test="optionDesc!=null">
+                #{optionDesc},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateOption">
+        update DEPOPTION set  OPTION_NAME=#{optionName},option_desc=#{optionDesc}
+        where id=#{id}
+    </update>
+    <delete id="deleteOption" parameterType="int">
+        DELETE from DEPOPTION where id=#{id}
+    </delete>
+    <delete id="deleteOptionByDepId" parameterType="int">
+        delete from DEPOPTION where DEP_ID=#{depId}
+    </delete>
+    <select id="queryOptionByDepId" parameterType="int" resultMap="optionMap">
+        SELECT * from DEPOPTION WHERE dep_id=#{depId}
+    </select>
+    <select id="queryOptionById" parameterType="int" resultMap="optionMap">
+        select * FROM DEPOPTION where ID=#{id}
+    </select>
+
+</mapper>

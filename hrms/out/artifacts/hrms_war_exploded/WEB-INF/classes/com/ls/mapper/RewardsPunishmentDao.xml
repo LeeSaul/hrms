@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ls.dao.RewardsPunishmentDao">
+    <resultMap id="rpMap" type="RewardsPunishment">
+        <id property="id" column="id"/>
+        <result property="attId" column="att_id"/>
+        <result property="empId" column="emp_id"/>
+        <result property="caption" column="caption"/>
+        <result property="rewardsFine" column="rewards_fine"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <insert id="saveRewardsPunishment" parameterType="RewardsPunishment">
+        insert into REWARDS_PUNISHMENT
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="empId!=null">
+                emp_id,
+            </if>
+            <if test="rewardsFine!=null">
+                rewards_fine,
+            </if>
+            <if test="caption">
+                caption,
+            </if>
+            <if test="attId!=null">
+                att_id,
+            </if>
+            <if test="createTime!=null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            aa.nextval,
+            <if test="empId!=null">
+                #{empId},
+            </if>
+            <if test="rewardsFine!=null">
+                #{rewardsFine},
+            </if>
+            <if test="caption">
+                #{caption},
+            </if>
+            <if test="attId!=null">
+                #{attId},
+            </if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
+        </trim>
+    </insert>
+    <delete id="deleteRewardsPunishment">
+        DELETE from rewards_punishment
+        where to_date(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss') BETWEEN  to_date(#{0},'yyyy-mm-dd hh24:mi:ss')
+      and to_date(#{1},'yyyy-mm-dd hh24:mi:ss')
+    </delete>
+    <select id="queryByAttId" parameterType="int" resultMap="rpMap">
+        select * from REWARDS_PUNISHMENT where ATT_ID=#{attId}
+    </select>
+
+    <select id="queryLastMonthPunishment" resultMap="rpMap">
+        select * from REWARDS_PUNISHMENT <![CDATA[where to_date(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')< to_date(#{2},'yyyy-mm-dd hh24:mi:ss')]]>
+         and to_date(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')>=to_date(#{1},'yyyy-mm-dd hh24:mi:ss') and EMP_ID=#{0}
+    </select>
+    <select id="queryPunishment" resultMap="rpMap">
+        select * from REWARDS_PUNISHMENT <![CDATA[where to_date(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')< to_date(#{1},'yyyy-mm-dd hh24:mi:ss')]]>
+         and to_date(CREATE_TIME,'yyyy-mm-dd hh24:mi:ss')>=to_date(#{0},'yyyy-mm-dd hh24:mi:ss') and rewards_fine!=0
+    </select>
+</mapper>

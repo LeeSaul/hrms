@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ls.dao.TouristDao">
+    <resultMap id="tourMap" type="Tourist">
+        <id column="id" property="id"/>
+        <result column="tour_name" property="tourName"/>
+        <result column="tour_password" property="tourPassword"/>
+        <result column="tour_status" property="tourStatus"/>
+    </resultMap>
+
+    <insert id="tourRegister">
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+            select TOUR_SEQ.nextval from dual
+        </selectKey>
+        INSERT into tourist(id,tour_name,tour_password) VALUES (tour_seq.nextval,#{tourName},#{tourPassword})
+    </insert>
+    <insert id="addResume">
+
+    </insert>
+
+    <select id="queryTouristName" parameterType="String" resultMap="tourMap">
+        select * from TOURIST WHERE TOUR_NAME=#{tourName}
+    </select>
+    <select id="tourLogin" parameterType="Tourist" resultMap="tourMap">
+        select * from TOURIST WHERE TOUR_NAME=#{tourName} and TOUR_PASSWORD=#{tourPassword}
+    </select>
+</mapper>

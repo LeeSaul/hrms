@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ls.dao.DeliveryDao">
+    <resultMap id="deliverMap" type="Delivery">
+        <id property="id" column="de_id"/>
+        <result property="recId" column="rec_id"/>
+        <result property="resumeId" column="resume_id"/>
+        <result property="status" column="status"/>
+        <association property="resume" javaType="Resume">
+            <id property="id" column="re_id"/>
+            <result property="resumeName" column="resume_name"/>
+        </association>
+        <association property="recruitment" javaType="Recruitment">
+            <id property="id" column="recruit_id"/>
+            <result property="positionType" column="position_type"/>
+        </association>
+    </resultMap>
+    <insert id="saveDelivery">
+        INSERT into DELIVERY(ID, RESUME_ID, REC_ID, STATUS)
+        VALUES (AA.nextval,#{resumeId},#{recId},#{status})
+    </insert>
+    <update id="updateDelivery" parameterType="Delivery">
+        update DELIVERY set STATUS=#{status} where id=#{id}
+    </update>
+    <delete id="deleteDeliveryByRecId" parameterType="int">
+        delete from DELIVERY where REC_ID=#{recId}
+    </delete>
+    <select id="queryByReIdAndRecId" parameterType="Delivery" resultMap="deliverMap">
+        select de.ID de_id,de.STATUS status,re.ID re_id,re.RESUME_NAME
+         resume_name,rec.ID recruit_id,rec.POSITION_TYPE position_type
+         from DELIVERY de,RESUME re,RECRUITMENT  rec WHERE
+         de.RESUME_ID=re.ID and de.REC_ID=rec.ID and  RESUME_ID=#{resumeId} and rec_id=#{recId}
+    </select>
+    <select id="queryAllDelivery" resultMap="deliverMap">
+        select de.ID de_id,de.STATUS status,re.ID re_id,re.RESUME_NAME resume_name,rec.ID recruit_id,
+        rec.POSITION_TYPE position_type
+         from DELIVERY de,RESUME re,RECRUITMENT  rec WHERE de.RESUME_ID=re.ID and de.REC_ID=rec.ID
+    </select>
+    <select id="queryDelivery" parameterType="int" resultMap="deliverMap">
+        select de.ID de_id,de.STATUS status,de.rec_id rec_id,de.RESUME_ID resume_id
+         from DELIVERY de where de.ID=#{id}
+    </select>
+    <select id="queryDeliveryByResumeId" parameterType="int"  resultMap="deliverMap">
+        select de.ID de_id,de.STATUS status,re.ID re_id,re.RESUME_NAME resume_name,
+        rec.ID recruit_id,rec.POSITION_TYPE position_type, de.RESUME_ID RESUME_ID
+         from DELIVERY de,RESUME re,RECRUITMENT  rec WHERE de.RESUME_ID=re.ID and de.REC_ID=rec.ID and re.ID=#{resumeId}
+    </select>
+    <select id="queryDepByStatus" parameterType="String" resultMap="deliverMap">
+         select de.ID de_id,de.STATUS status,re.ID re_id,re.RESUME_NAME
+         resume_name,rec.ID recruit_id,rec.POSITION_TYPE position_type,
+         de.RESUME_ID RESUME_ID
+         from DELIVERY de,RESUME re,RECRUITMENT  rec WHERE
+         de.RESUME_ID=re.ID and de.REC_ID=rec.ID and STATUS=#{status}
+    </select>
+    <select id="queryDeliveryByRecId" parameterType="int" resultMap="deliverMap">
+        select de.ID de_id,de.STATUS status,de.rec_id rec_id,de.RESUME_ID resume_id
+         from DELIVERY de where de.REC_ID=#{recId}
+    </select>
+</mapper>

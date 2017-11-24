@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ls.dao.EmployeeDao">
+    <resultMap id="empMap" type="Employee">
+        <id column="id" property="id"/>
+        <result column="dep_id" property="depId"/>
+        <result column="position_id" property="positionId"/>
+        <result column="resume_id" property="resumeId"/>
+        <result column="emp_name" property="empName"/>
+        <result column="emp_password" property="empPassword"/>
+        <result column="emp_type" property="empType"/>
+        <result column="emp_status" property="empStatus"/>
+        <result column="real_name" property="realName"/>
+        <result column="basic_wage" property="basicWage"/>
+        <result column="proportion" property="proportion"/>
+        <!--<association property="salary" resultMap="com.ls.dao.SalaryDao.salaryMap">-->
+        <!--</association>-->
+    </resultMap>
+    <insert id="addEmp" parameterType="Employee">
+        insert into EMPLOYEE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            ID,
+            <if test="realName">
+                real_name,
+            </if>
+            <if test="depId!=null">
+                DEP_ID,
+            </if>
+            <if test="resumeId!=null">
+                RESUME_ID,
+            </if>
+            <if test="positionId!=null">
+                POSITION_ID,
+            </if>
+            <if test="empName!=null">
+                EMP_NAME,
+            </if>
+            <if test="empPassword!=null">
+                EMP_PASSWORD,
+            </if>
+            <if test="empStatus!=null">
+                EMP_STATUS,
+            </if>
+            <if test="empType!=null">
+                EMP_TYPE,
+            </if>
+            <if test="basicWage!=0">
+                basic_wage,
+            </if>
+            <if test="proportion!=0">
+                proportion,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            tour_seq.nextval,
+            <if test="realName">
+                #{realName},
+            </if>
+            <if test="depId!=null">
+                #{depId},
+            </if>
+            <if test="resumeId!=null">
+                #{resumeId},
+            </if>
+            <if test="positionId!=null">
+                #{positionId},
+            </if>
+            <if test="empName!=null">
+                #{empName},
+            </if>
+            <if test="empPassword!=null">
+                #{empPassword},
+            </if>
+            <if test="empStatus!=null">
+                #{empStatus},
+            </if>
+            <if test="empType!=null">
+                #{empType},
+            </if>
+            <if test="basicWage!=0">
+                #{basicWage},
+            </if>
+            <if test="proportion!=0">
+                #{proportion},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateEmp" parameterType="Employee">
+        update EMPLOYEE SET
+        <trim suffixOverrides=",">
+            <if test="realName!=null">
+                real_name=#{realName},
+            </if>
+            <if test="resumeId!=0">
+                RESUME_ID=#{resumeId},
+            </if>
+            <if test="positionId!=0">
+                position_id=#{positionId},
+            </if>
+            <if test="empName!=0">
+                EMP_NAME=#{empName},
+            </if>
+            <if test="empPassword!=null">
+                EMP_PASSWORD=#{empPassword},
+            </if>
+            <if test="empStatus!=null">
+                emp_status=#{empStatus},
+            </if>
+            <if test="empType>=0">
+                emp_type=#{empType},
+            </if>
+            <if test="depId!=0">
+                dep_id=#{depId},
+            </if>
+        </trim>
+        where id=#{id}
+    </update>
+    <update id="changeOp" parameterType="Employee">
+        update EMPLOYEE SET POSITION_ID=#{positionId},
+        dep_id=#{depId} where id=#{id}
+    </update>
+    <update id="updateEmpStatus" parameterType="Employee">
+        update EMPLOYEE
+        set emp_status=#{empStatus}
+        where ID=#{id}
+    </update>
+    <update id="recoveryEmp" parameterType="Employee">
+        update EMPLOYEE set EMP_STATUS=#{empStatus} where id=#{id}
+    </update>
+
+    <update id="updateSocial" parameterType="Employee">
+        update EMPLOYEE set PROPORTION=#{proportion}
+        <if test="basicWage!=0">
+            ,basic_wage=${basicWage}
+        </if>
+    </update>
+    <select id="empLogin" parameterType="Employee" resultMap="empMap">
+        select * from EMPLOYEE where emp_name=#{empName}
+        and emp_password=#{empPassword} and emp_type=#{empType}
+    </select>
+    <select id="queryEmp" parameterType="int" resultMap="empMap">
+        select * from EMPLOYEE where ID=#{id}
+    </select>
+    <select id="queryEepByDepId" parameterType="int" resultMap="empMap">
+        select * from EMPLOYEE WHERE DEP_ID=#{depId}
+    </select>
+    <select id="queryEepByPosId" parameterType="int" resultMap="empMap">
+        select * from EMPLOYEE where POSITION_ID=#{positionId}
+    </select>
+    <select id="queryEmpByOpId" resultMap="empMap">
+        select * from EMPLOYEE where POSITION_ID=#{positionId} and emp_status='可用'
+    </select>
+    <select id="queryEmpByName" parameterType="String" resultMap="empMap">
+        select * from EMPLOYEE where EMP_NAME=#{name}
+    </select>
+    <select id="queryDismissEmp" parameterType="String" resultMap="empMap">
+        select * from EMPLOYEE where EMP_STATUS=#{abnormalStatus}
+    </select>
+    <select id="queryAllEmpByStatus" parameterType="String" resultMap="empMap">
+        select /*em.ID id,em.EMP_NAME emp_name,em.REAL_NAME real_name,
+         em.RESUME_ID resume_id,em.EMP_TYPE emp_type,em.EMP_STATUS emp_status,
+          em.POSITION_ID POSITION_ID,em.DEP_ID DEP_ID,em.EMP_PASSWORD EMP_PASSWORD,
+           sa.ID sa_id,sa.EMP_ID sa_emp_id,sa.BASIC_WAGE basic_wage,
+            sa.OVERTIME_PAY OVERTIME_PAY, sa.SOCIAL_SECURITY SOCIAL_SECURITY,
+            sa.PERFORMANCE_PAY PERFORMANCE_PAY,sa.RE_PUN_PAY RE_PUN_PAY*/
+             * from EMPLOYEE /*em LEFT JOIN SALARY sa ON em.ID=sa.EMP_ID*/
+               where EMP_STATUS=#{normalStatus} and emp_type=1
+    </select>
+    <select id="queryEmpByResumeId" parameterType="int" resultMap="empMap">
+        select * from EMPLOYEE where RESUME_ID=#{resumeId}
+    </select>
+
+</mapper>

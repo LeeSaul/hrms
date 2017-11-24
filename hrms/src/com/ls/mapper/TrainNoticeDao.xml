@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ls.dao.TrainNoticeDao">
+    <resultMap id="noticeMap" type="TrainNotice">
+        <id property="id" column="id"/>
+        <result property="empId" column="emp_id"/>
+        <result property="trainId" column="train_id"/>
+        <association property="employee" javaType="Employee">
+            <id property="id" column="em_id"/>
+            <result property="realName" column="real_name"/>
+        </association>
+        <association property="train" javaType="Train">
+            <id property="id" column="tr_id"/>
+            <result property="title" column="title"/>
+            <result property="content" column="content"/>
+            <result property="startTime" column="start_time"/>
+            <result property="endTime" column="end_time"/>
+            <result property="createTime" column="create_time"/>
+            <result property="status" column="status"/>
+        </association>
+    </resultMap>
+    <insert id="arrangePerson" parameterType="TrainNotice">
+        insert into TRAINNOTICE(ID, TRAIN_ID, EMP_ID)
+        VALUES(aa.nextval,#{trainId},#{empId})
+    </insert>
+    <delete id="deleteTrainNotice" parameterType="int">
+        DELETE from TRAINNOTICE where TRAIN_ID=#{id}
+    </delete>
+    <select id="queryTrainById" parameterType="int" resultMap="noticeMap">
+        select tr.ID id,tr.EMP_ID emp_id,tr.TRAIN_ID train_id,em.REAL_NAME real_name
+        from TRAINNOTICE tr left JOIN EMPLOYEE em on tr.EMP_ID=em.ID where TRAIN_ID=#{trainId}
+    </select>
+    <select id="queryTrainByEmpId" parameterType="int" resultMap="noticeMap">
+        select tr.CONTENT content,tr.TITLE,tr.START_TIME,tr.END_TIME,tr.STATUS status
+         from TRAIN tr LEFT JOIN TRAINNOTICE trn on tr.ID=trn.TRAIN_ID LEFT JOIN EMPLOYEE em
+         ON trn.EMP_ID=em.id where em.ID=#{id}
+    </select>
+</mapper>
